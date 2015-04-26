@@ -1,0 +1,6 @@
+<?php
+
+// Steam API key to use
+$APIKEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+
+?>
