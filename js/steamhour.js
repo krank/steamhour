@@ -5,16 +5,37 @@ var sixtyplus,
     lessthansixty,
     zerominutes;
 
+/* ----------------------------------------------------------------------------
+ * UTILITY FUNCTIONS
+ */
+function minutesToHours(minutes) {
+    'use strict';
+    return "(" +
+        Math.floor(minutes / 60) + "h" +
+        minutes % 60 + "m)";
+}
+
+function getPercent(num, data) {
+    'use strict';
+    
+    /* Return the ratio between the given number and the total amout of games
+    in data set, expressed as a percentage */
+    return (num / data.response.game_count * 100).toFixed(2);
+}
+
 function displayError(errorText) {
-    "use strict";
+    'use strict';
 
     $(".errortext").text(errorText);
-    $(".error").fadeIn();
+    $(".error").addClass("fadeIn");
 
 }
 
+/* ----------------------------------------------------------------------------
+ * GAME DATA HANDLING
+ */
 function insertGameData(targetElement, gameList) {
-    "use strict";
+    'use strict';
 
     var i,
         gameProto,
@@ -30,9 +51,11 @@ function insertGameData(targetElement, gameList) {
         '<img class="gameicon">' +
         '<p class="gametitle"></p>' +
         '<p class="gametime"></p>' +
+        '<p class="gametime_hrs"></p>' +
         '</div>');
 
 
+    // use prototype to create list of games
     for (i = 0; i < gameList.length; i += 1) {
         gameElement = gameProto.clone();
         gameData = gameList[i];
@@ -55,6 +78,11 @@ function insertGameData(targetElement, gameList) {
 
         if (gameData.playtime_forever > 0) {
             gameElement.find(".gametime").text(gameData.playtime_forever + " minutes");
+            if (gameData.playtime_forever > 60) {
+                gameElement.find(".gametime_hrs").text(
+                    minutesToHours(gameData.playtime_forever)
+                );
+            }
         }
 
         // Insert the element
@@ -63,13 +91,12 @@ function insertGameData(targetElement, gameList) {
     }
 }
 
-function getPercent(num, data) {
-    "use strict";
-    return (num / data.response.game_count * 100).toFixed(2);
-}
+/* ----------------------------------------------------------------------------
+ * SORTING FUNCTIONS
+ */
 
 function sortGames(gameList, sorterElement, sorterFunction, containerElement, forcedReverse) {
-    "use strict";
+    'use strict';
 
     gameList = gameList.sort(sorterFunction);
 
@@ -88,9 +115,8 @@ function sortGames(gameList, sorterElement, sorterFunction, containerElement, fo
 
 }
 
-
 function sortGameAlpha(gameA, gameB) {
-    "use strict";
+    'use strict';
 
     if (gameA.name.toLowerCase() > gameB.name.toLowerCase()) {
         return 1;
@@ -103,7 +129,7 @@ function sortGameAlpha(gameA, gameB) {
 }
 
 function sortGameTime(gameA, gameB) {
-    "use strict";
+    'use strict';
 
     // If play times are equal, use game names as keys)
     if (gameA.playtime_forever === gameB.playtime_forever) {
@@ -114,10 +140,12 @@ function sortGameTime(gameA, gameB) {
 }
 
 
-
+/* ----------------------------------------------------------------------------
+ * MAIN CODE
+ */
 
 $(document).ready(function () {
-    "use strict";
+    'use strict';
 
     var i, query, vars, pair, steamid, freegames;
 
@@ -127,6 +155,8 @@ $(document).ready(function () {
         e.preventDefault();
 
         // Display the loading spinner
+        //$(".loading").fadeIn();
+        
         $(".loading").fadeIn();
 
         $(".error").fadeOut();
@@ -152,7 +182,7 @@ $(document).ready(function () {
                 var errorText,
                     totalminutes;
 
-                $(".loading").slideUp();
+                $(".loading").slideUp(1000);
 
                 if (data.hasOwnProperty("error")) {
 
@@ -211,8 +241,8 @@ $(document).ready(function () {
                 $('.lessthansixty.num').text(lessthansixty.length);
                 $('.zerominutes.num').text(zerominutes.length);
 
-                // Set minutes
-                $('.total_minutes').text(totalminutes);
+                // Set total minutes
+                $('.total_minutes').text(totalminutes + " " + minutesToHours(totalminutes));
 
                 // Set percentages
                 $('.sixtyplus.percent').text(getPercent(sixtyplus.length, data));

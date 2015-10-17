@@ -91,12 +91,7 @@ h2 {
     color: #fff;
     padding: .5em 1.3em;
     padding-right: .3em;
-}
-
-
-
-.games_num {
-    
+    margin-top: 0;
 }
 
 .loading img {
@@ -113,7 +108,7 @@ h2 {
     float: left;
     padding-bottom: 5em;
     margin-right: 1em;
-    
+    margin-top: 1em;
 }
 
 footer {
@@ -168,6 +163,17 @@ footer a:last-child {
 
 .game p.gametitle {
     font-weight: bold;
+    margin-bottom: .5em;
+}
+
+.game p.gametime {
+    margin-bottom: 0.2em;
+}
+
+.game p.gametime_hrs {
+    font-size: .8em;
+    font-style: italic;
+    text-indent: 1em;
 }
 
 .columnsub {
@@ -192,6 +198,7 @@ form.steamid button:hover {
 
 .loading {
     display: none;
+    margin-bottom: 1em;
 }
 
 .summary, .column {
