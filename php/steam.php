@@ -1,51 +1,35 @@
 <?php
 
-// Function for getting json data from http resource via CURL
-function get_json_from($url): string
-{
-    // Init curl and set some options
-    $ch = curl_init($url);
+namespace steam {
 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 7);
-    curl_setopt($ch, CURLOPT_FAILONERROR, true);
-
-    // Execute curl
-    $data = curl_exec($ch);
-
-    // Get HTTP response
-    $http_response = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    // Check to see if there's an error
-    if (curl_error($ch) != '' || $http_response >= 400) {
-
-        // If there is, create an array full of useful info
-        $error_array = array('error' => "Error getting the data",
-            'curl_errno' => curl_errno($ch),
-            'curl_error' => curl_error($ch),
-            'http_status' => curl_getinfo($ch, CURLINFO_HTTP_CODE),
-        );
-
-        // Encode the array into json
-        $data = json_encode($error_array);
-    }
-
-    // Close curl and return the data
-    curl_close($ch);
-    return $data;
-}
-
-function get_steamid($name, $apikey): string
-{
+  function resolve_vanity_url($vanity_url, $apikey): string
+  {
     // Construct URL for getting id from vanity url
-    $url = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=$apikey&vanityurl=$name";
+    $url = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=$apikey&vanityurl=$vanity_url";
 
     // Get json data
-    $jsondata = get_json($url);
+    $json_data = \json\get_json_from($url);
 
     // Decode json
-    $response_data = json_decode($jsondata);
+    $response_data = json_decode($json_data);
 
-    // Return decoded response
-    return $response_data->response;
+    // If successful return the id, otherwise exit with a JSON-formatted error
+    if ($response_data->response->success == 1) {
+
+      return $response_data->response->steamid;
+    } else {
+      $error_array = array('error' => "Could not resolve vanity URL $vanity_url");
+
+      exit(\json\make_error_json($error_array));
+    }
+  }
+
+  function get_owned_games(string $steam_id, int $include_free_games, string $apikey)
+  {
+    $url = "http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=$apikey&include_appinfo=1&include_played_free_games=$include_free_games&steamid=$steam_id&format=json";
+
+    $json_data = \json\get_json_from($url);
+
+    return $json_data;
+  }
 }

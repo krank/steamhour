@@ -174,7 +174,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             cache: false,
-            url: 'getgamelist.php',
+            url: 'php/getgamelist.php',
             dataType: 'json',
             data: steamstr,
             success: function (data) {
