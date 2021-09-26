@@ -1,0 +1,88 @@
+/* == GAME LISTS == */
+
+.games {
+  display: grid;
+  gap: 1rem;
+
+  p {
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+
+  .columnsub {
+    font-style: italic;
+    padding-left: 1rem;
+
+    .num::after {
+      content: " games";
+    }
+  }
+
+  .sorters {
+    font-size: .8em;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+
+    a {
+      text-indent: 1rem;
+    }
+    a:hover {
+      background-color: #eee;
+    }
+  }
+}
+
+@media (min-width: 45rem) {
+  .games {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+}
+
+.descending::after {
+  content: "▼";
+}
+
+.ascending::after {
+  content: "▲";
+}
+
+/* == GAMES == */
+
+
+
+.game {
+  margin: 1em;
+  border: 2px solid #333;
+  padding: 0.5em;
+}
+
+.game img {
+  float: left;
+  margin-top: 0.2em;
+  width: 32px;
+  height: 32px;
+}
+
+.game p {
+  margin-left: 32px;
+  padding-left: 1em;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.game p.gametitle {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.game p.gametime {
+  margin-bottom: 0.2em;
+}
+
+.game p.gametime_hrs {
+  font-size: 0.8em;
+  font-style: italic;
+  text-indent: 1em;
+}

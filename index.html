@@ -7,6 +7,10 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+
   <link rel="icon" href="images/favicon.png">
 
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -83,7 +87,54 @@
     </section>
 
     <section class="games">
+      <section class="column">
+        <header>
+          <h2>60+ minutes</h2>
+          <p class="columnsub">
+            <span class="num"></span>
+            (<span class="percent"></span>%)
+          </p>
+          <p class="sorters">
+            <a href="#" class="byname">Sort by name</a>
+            <a href="#" class="bytime descending">Sort by time</a>
+          </p>
+        </header>
+        <section class="gamelist">
 
+        </section>
+      </section>
+      <section class="column">
+        <header>
+          <h2>1–59 minutes</h2>
+          <p class="columnsub">
+            <span class="num"></span>
+            (<span class="percent"></span>%)
+          </p>
+          <p class="sorters">
+            <a href="#" class="byname">Sort by name</a>
+            <a href="#" class="bytime descending">Sort by time</a>
+          </p>
+        </header>
+        <section class="gamelist">
+
+        </section>
+      </section>
+      <section class="column">
+        <header>
+          <h2>0 minutes</h2>
+          <p class="columnsub">
+            <span class="num"></span>
+            (<span class="percent"></span>%)
+          </p>
+          <p class="sorters">
+            <a href="#" class="byname descending">Sort by name</a>
+            <!-- <a href="#" class="bytime">Sort by time</a> -->
+          </p>
+        </header>
+        <section class="gamelist">
+
+        </section>
+      </section>
     </section>
 
   </main>
@@ -96,16 +147,27 @@
 </body>
 
 <template class="column">
-  <h2>%%header%%</h2>
-  <p class="columnsub">
-    <span class="num"></span>
-    (<span class="percent"></span>%)
-  </p>
-  <div class="games">
-    <p class="sorters">
-      <a href="#" class="byname">Sort by name</a>
-      <a href="#" class="bytime reverse">Sort by time</a>
+  <section>
+    <h2>%%header%%</h2>
+    <p class="columnsub">
+      <span class="num"></span>
+      (<span class="percent"></span>%)
     </p>
+    <div class="games">
+      <p class="sorters">
+        <a href="#" class="byname">Sort by name</a>
+        <a href="#" class="bytime reverse">Sort by time</a>
+      </p>
+    </div>
+  </section>
+</template>
+
+<template class="game">
+  <div class="game">
+    <img class="gameicon">
+    <p class="gametitle"></p>
+    <p class="gametime"></p>
+    <p class="gametime_hrs"></p>
   </div>
 </template>
 
