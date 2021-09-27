@@ -100,7 +100,12 @@
           </p>
         </header>
         <section class="gamelist">
-
+          <article>
+            <h3>No Man's Sky</h3>
+            <img class="gameicon">
+            <p class="gametime">8772 minutes</p>
+            <p class="gametime_hrs">(146h12m)</p>
+          </article>
         </section>
       </section>
       <section class="column">
@@ -148,7 +153,7 @@
 
 <template class="column">
   <section>
-    <h2>%%header%%</h2>
+    <h2>%header%</h2>
     <p class="columnsub">
       <span class="num"></span>
       (<span class="percent"></span>%)
@@ -163,12 +168,12 @@
 </template>
 
 <template class="game">
-  <div class="game">
+  <article>
+    <h3>%gametitle%</h3>
     <img class="gameicon">
-    <p class="gametitle"></p>
-    <p class="gametime"></p>
-    <p class="gametime_hrs"></p>
-  </div>
+    <p class="gametime">%gametime%</p>
+    <p class="gametime_hrs">%gamehours%</p>
+  </article>
 </template>
 
 </html>
