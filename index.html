@@ -9,7 +9,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,700;1,500&display=swap"
+    rel="stylesheet">
 
   <link rel="icon" href="images/favicon.png">
 
@@ -153,17 +154,19 @@
 
 <template class="column">
   <section>
-    <h2>%header%</h2>
-    <p class="columnsub">
-      <span class="num"></span>
-      (<span class="percent"></span>%)
-    </p>
-    <div class="games">
+    <header>
+      <h2>%header%</h2>
+      <p class="columnsub">
+        <span class="num"></span>
+        (<span class="percent"></span>%)
+      </p>
       <p class="sorters">
         <a href="#" class="byname">Sort by name</a>
-        <a href="#" class="bytime reverse">Sort by time</a>
+        <a href="#" class="bytime descending">Sort by time</a>
       </p>
-    </div>
+    </header>
+    <section class="gamelist">
+    </section>
   </section>
 </template>
 
