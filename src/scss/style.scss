@@ -91,12 +91,20 @@ section {
   display: none;
 }
 
+.error.active {
+  display: block;
+}
+
 .summary {
   // animation: fadeIn .5s;
-  // display: none;
+  display: none;
   span {
     font-weight: bold;
   }
+}
+
+.summary.active {
+  display: block;
 }
 
 /* == FOOTER == */

@@ -18,6 +18,8 @@
 
   <link rel="stylesheet" href="css/style.css">
 
+  <script defer src="js/bundle.js"></script>
+
   <!-- <script src="js/jquery-1.11.2.min.js"></script>
     <script src="js/steamhour.js"></script> -->
 
@@ -68,7 +70,7 @@
 
     <section class="summary">
       <h2>Summary</h2>
-      <p>Total # of games: <span class="games num"></span>
+      <p>Total # of games: <span class="games_num"></span>
       </p>
       <p>Total number of minutes played:
         <span class="total_minutes"></span>
@@ -88,59 +90,7 @@
     </section>
 
     <section class="games">
-      <section class="column">
-        <header>
-          <h2>60+ minutes</h2>
-          <p class="columnsub">
-            <span class="num"></span>
-            (<span class="percent"></span>%)
-          </p>
-          <p class="sorters">
-            <a href="#" class="byname">Sort by name</a>
-            <a href="#" class="bytime descending">Sort by time</a>
-          </p>
-        </header>
-        <section class="gamelist">
-          <article>
-            <h3>No Man's Sky</h3>
-            <img class="gameicon">
-            <p class="gametime">8772 minutes</p>
-            <p class="gametime_hrs">(146h12m)</p>
-          </article>
-        </section>
-      </section>
-      <section class="column">
-        <header>
-          <h2>1–59 minutes</h2>
-          <p class="columnsub">
-            <span class="num"></span>
-            (<span class="percent"></span>%)
-          </p>
-          <p class="sorters">
-            <a href="#" class="byname">Sort by name</a>
-            <a href="#" class="bytime descending">Sort by time</a>
-          </p>
-        </header>
-        <section class="gamelist">
-
-        </section>
-      </section>
-      <section class="column">
-        <header>
-          <h2>0 minutes</h2>
-          <p class="columnsub">
-            <span class="num"></span>
-            (<span class="percent"></span>%)
-          </p>
-          <p class="sorters">
-            <a href="#" class="byname descending">Sort by name</a>
-            <!-- <a href="#" class="bytime">Sort by time</a> -->
-          </p>
-        </header>
-        <section class="gamelist">
-
-        </section>
-      </section>
+      
     </section>
 
   </main>
@@ -160,10 +110,10 @@
         <span class="num"></span>
         (<span class="percent"></span>%)
       </p>
-      <p class="sorters">
+      <!--<p class="sorters">
         <a href="#" class="byname">Sort by name</a>
         <a href="#" class="bytime descending">Sort by time</a>
-      </p>
+      </p>-->
     </header>
     <section class="gamelist">
     </section>
