@@ -61,9 +61,15 @@ function makeRequest(steamId: string, includeFreeGames: boolean, callback: (json
 
 function displayResults(jsonData: SteamHour.UserGames) {
 
-  updateOverallStats(jsonData.stats);
+  updateOverallStats(jsonData);
 
-  // Create columns, including making sorters work
+  let column60Plus: DocumentFragment = makeColumn("60+ minutes", jsonData.games60Plus);
+  let column60Minus: DocumentFragment = makeColumn("1–59 minutes", jsonData.games60Minus);
+  let columnZero: DocumentFragment = makeColumn("0 minutes", jsonData.gamesZero);
+
+  document.querySelector("section.games").appendChild(column60Plus);
+  document.querySelector("section.games").appendChild(column60Minus);
+  document.querySelector("section.games").appendChild(columnZero);
 
   document.querySelector("section.summary").classList.add("active");
 }
@@ -73,24 +79,36 @@ function displayError(error: string) {
   document.querySelector("section.error").classList.add("active");
 }
 
-function updateOverallStats(stats: SteamHour.Stats) {
+function updateOverallStats(jsonData: SteamHour.UserGames) {
 
   document.querySelector("section.summary span.games_num")
-    .textContent = stats.totalNumberOfGames.toString();
+    .textContent = jsonData.stats.totalNumberOfGames.toString();
   document.querySelector("section.summary span.total_minutes")
-    .textContent = stats.totalNumberOfMinutesPlayed.toString();
+    .textContent = jsonData.stats.totalNumberOfMinutesPlayed.toString();
 
-  updateStat("sixtyplus", stats.games60PlusNum, stats.games60PlusPercent);
-  updateStat("lessthansixty", stats.games60MinusNum, stats.games60MinusPercent);
-  updateStat("zerominutes", stats.gamesZeroNum, stats.gamesZeroPercent);
+  updateStat("sixtyplus",jsonData.games60Plus);
+  updateStat("lessthansixty", jsonData.games60Minus);
+  updateStat("zerominutes", jsonData.gamesZero);
 
 }
 
-function updateStat(baseSelector: string, num: number, percent: string): void {
+function updateStat(baseSelector: string, gameCollection:SteamHour.GameCollection): void {
   document.querySelector(`section.summary span.${baseSelector}.num`)
-    .textContent = num.toString();
+    .textContent = gameCollection.num.toString();
   document.querySelector(`section.summary span.${baseSelector}.percent`)
-    .textContent = percent;
+    .textContent = gameCollection.percent;
+}
+
+function makeColumn(headerText: string, gameCollection: SteamHour.GameCollection): DocumentFragment {
+
+  let columnTemplate: HTMLTemplateElement = document.querySelector("template.column");
+  let column: DocumentFragment = document.importNode(columnTemplate, true).content;
+
+  column.querySelector("h2").textContent = headerText;
+  column.querySelector("span.num").textContent = gameCollection.num.toString();
+  column.querySelector("span.percent").textContent = gameCollection.percent;
+
+  return column;
 }
 
 // Function for setting the game list of a column – used initially & by sorters

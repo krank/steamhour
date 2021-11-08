@@ -2,9 +2,15 @@ export interface UserGames {
   game_count: number;
   games: SteamGame[];
   stats?: Stats;
-  games60Plus?: SteamGame[];
-  games60Minus?: SteamGame[];
-  gamesZero?: SteamGame[];
+  games60Plus?: GameCollection;
+  games60Minus?: GameCollection;
+  gamesZero?: GameCollection;
+}
+
+export interface GameCollection {
+  games: SteamGame[];
+  num: number;
+  percent: string;
 }
 
 export interface SteamGame {
@@ -19,16 +25,8 @@ export interface SteamGame {
 }
 
 export interface Stats {
-  totalNumberOfGames: number,
-  totalNumberOfMinutesPlayed: number,
-
-  games60PlusNum: number,
-  games60MinusNum: number,
-  gamesZeroNum: number,
-
-  games60PlusPercent: string,
-  games60MinusPercent: string,
-  gamesZeroPercent: string
+  totalNumberOfGames: number;
+  totalNumberOfMinutesPlayed: number;
 }
 
 function getPercent(fraction: number, whole: number): string {
@@ -39,8 +37,7 @@ export function MakeRequest(steamId: string, includeFreeGames: boolean, callback
 
   let requestUrl = `./php/getgamelist.php?steamid=${steamId}`;
 
-  if (includeFreeGames)
-  {
+  if (includeFreeGames) {
     requestUrl += "&includefreegames=on";
   }
 
@@ -51,20 +48,18 @@ export function MakeRequest(steamId: string, includeFreeGames: boolean, callback
 
       console.log(jsonData);
 
-      if (!jsonData.response)
-      {
+      if (!jsonData.response) {
         errorCallback(jsonData.error);
         return;
       }
 
-      if (Object.keys(jsonData.response).length == 0)
-      {
+      if (Object.keys(jsonData.response).length == 0) {
         errorCallback("Empty response; make sure user's privacy settings allow looking at their games.");
         return;
       }
 
       let newJsonData: UserGames = jsonData.response;
-      
+
       // console.log(newJsonData);
       ProcessResponse(newJsonData);
 
@@ -75,37 +70,50 @@ export function MakeRequest(steamId: string, includeFreeGames: boolean, callback
 
 function ProcessResponse(jsonData: UserGames): void {
 
-  if (!jsonData.games60Plus) jsonData.games60Plus = [];
-  if (!jsonData.games60Minus) jsonData.games60Minus = [];
-  if (!jsonData.gamesZero) jsonData.gamesZero = [];
+  jsonData.games60Plus = { games: [], num: 0, percent: "" };
+  jsonData.games60Minus = { games: [], num: 0, percent: "" };
+  jsonData.gamesZero = { games: [], num: 0, percent: "" };
 
   jsonData.games.forEach((game: SteamGame) => {
     if (game.playtime_forever == 0) {
-      jsonData.gamesZero.push(game);
+      jsonData.gamesZero.games.push(game);
     }
     else if (game.playtime_forever < 60) {
-      jsonData.games60Minus.push(game);
+      jsonData.games60Minus.games.push(game);
     }
     else {
-      jsonData.games60Plus.push(game);
+      jsonData.games60Plus.games.push(game);
     }
   });
 
-  calculateStats(jsonData);
+  jsonData.stats = {
+    totalNumberOfGames: jsonData.game_count,
+    totalNumberOfMinutesPlayed: 0
+  }
+
+  calculateStat(jsonData.games60Plus, jsonData.game_count);
+  calculateStat(jsonData.games60Minus, jsonData.game_count);
+  calculateStat(jsonData.gamesZero, jsonData.game_count);
 }
 
 function calculateStats(jsonData: UserGames): void {
 
   jsonData.stats = {
     totalNumberOfGames: jsonData.game_count,
-    totalNumberOfMinutesPlayed: 0,
+    totalNumberOfMinutesPlayed: 0
 
-    games60PlusNum: jsonData.games60Plus.length,
-    games60MinusNum: jsonData.games60Minus.length,
-    gamesZeroNum: jsonData.gamesZero.length,
+    // games60PlusNum: jsonData.games60Plus.length,
+    // games60MinusNum: jsonData.games60Minus.length,
+    // gamesZeroNum: jsonData.gamesZero.length,
 
-    games60PlusPercent: getPercent(jsonData.games60Plus.length, jsonData.game_count),
-    games60MinusPercent: getPercent(jsonData.games60Minus.length, jsonData.game_count),
-    gamesZeroPercent: getPercent(jsonData.gamesZero.length, jsonData.game_count)
+    // games60PlusPercent: getPercent(jsonData.games60Plus.length, jsonData.game_count),
+    // games60MinusPercent: getPercent(jsonData.games60Minus.length, jsonData.game_count),
+    // gamesZeroPercent: getPercent(jsonData.gamesZero.length, jsonData.game_count)
   }
+
+}
+
+function calculateStat(gameCollection: GameCollection, gameCount: number) {
+  gameCollection.num = gameCollection.games.length;
+  gameCollection.percent = getPercent(gameCollection.games.length, gameCount);
 }
