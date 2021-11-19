@@ -53,8 +53,7 @@ function setupFormInteractivity(form: HTMLFormElement) {
 
 function makeRequest(steamId: string, includeFreeGames: boolean, callback: (jsonData: SteamHour.UserGames) => void, errorCallback: (error: string) => void) {
 
-  document.querySelector("section.error").classList.remove("active");
-  document.querySelector("section.summary").classList.remove("active");
+  clearResults();
 
   SteamHour.MakeRequest(steamId, includeFreeGames, displayResults, displayError);
 }
@@ -63,9 +62,9 @@ function displayResults(jsonData: SteamHour.UserGames) {
 
   updateOverallStats(jsonData);
 
-  let column60Plus: DocumentFragment = makeColumn("60+ minutes", jsonData.games60Plus);
-  let column60Minus: DocumentFragment = makeColumn("1–59 minutes", jsonData.games60Minus);
-  let columnZero: DocumentFragment = makeColumn("0 minutes", jsonData.gamesZero);
+  let column60Plus: DocumentFragment = makeColumn("60+ minutes", jsonData.games_60_plus);
+  let column60Minus: DocumentFragment = makeColumn("1–59 minutes", jsonData.games_60_minus);
+  let columnZero: DocumentFragment = makeColumn("0 minutes", jsonData.games_zero);
 
   document.querySelector("section.games").appendChild(column60Plus);
   document.querySelector("section.games").appendChild(column60Minus);
@@ -79,20 +78,27 @@ function displayError(error: string) {
   document.querySelector("section.error").classList.add("active");
 }
 
+function clearResults()
+{
+  document.querySelector("section.games").innerHTML = "";
+  document.querySelector("section.summary").classList.remove("active");
+  document.querySelector("section.error").classList.remove("active");
+}
+
 function updateOverallStats(jsonData: SteamHour.UserGames) {
 
   document.querySelector("section.summary span.games_num")
-    .textContent = jsonData.stats.totalNumberOfGames.toString();
+    .textContent = jsonData.stats.total_number_of_games.toString();
   document.querySelector("section.summary span.total_minutes")
-    .textContent = jsonData.stats.totalNumberOfMinutesPlayed.toString();
+    .textContent = jsonData.stats.total_number_of_minutes_played.toString();
 
-  updateStat("sixtyplus",jsonData.games60Plus);
-  updateStat("lessthansixty", jsonData.games60Minus);
-  updateStat("zerominutes", jsonData.gamesZero);
+  updateSingleOverallStat("sixtyplus",jsonData.games_60_plus);
+  updateSingleOverallStat("lessthansixty", jsonData.games_60_minus);
+  updateSingleOverallStat("zerominutes", jsonData.games_zero);
 
 }
 
-function updateStat(baseSelector: string, gameCollection:SteamHour.GameCollection): void {
+function updateSingleOverallStat(baseSelector: string, gameCollection:SteamHour.GameCollection): void {
   document.querySelector(`section.summary span.${baseSelector}.num`)
     .textContent = gameCollection.num.toString();
   document.querySelector(`section.summary span.${baseSelector}.percent`)
@@ -108,7 +114,51 @@ function makeColumn(headerText: string, gameCollection: SteamHour.GameCollection
   column.querySelector("span.num").textContent = gameCollection.num.toString();
   column.querySelector("span.percent").textContent = gameCollection.percent;
 
+  let gamelistContainer:HTMLElement = column.querySelector("section.gamelist");
+
+  // Create element for each game
+  gameCollection.games.forEach((gameData: SteamHour.SteamGame) => {
+    let gameElement: DocumentFragment = makeGameElement(gameData);
+
+    gamelistContainer.appendChild(gameElement);
+  });
+
   return column;
+}
+
+function makeGameElement(game: SteamHour.SteamGame): DocumentFragment
+{
+  console.log(game);
+
+  let gameElementTemplate: HTMLTemplateElement = document.querySelector("template.game");
+  let gameElement: DocumentFragment = document.importNode(gameElementTemplate, true).content;
+
+  gameElement.querySelector("h3").textContent = game.name;
+  gameElement.querySelector("img.gameicon").setAttribute("src", 
+  `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`);
+
+  let gametimeElement = gameElement.querySelector(".gametime");
+  let gametimeHrsElement = gameElement.querySelector(".gametime_hrs");
+
+  if (game.playtime_forever > 0)
+  {
+    gametimeElement.textContent = game.playtime_forever.toString() + " minutes";
+  }
+  else
+  {
+    gametimeElement.remove();
+  }
+
+  if (game.playtime_forever >= 60)
+  {
+    gametimeHrsElement.textContent = game.playtime_natural_language;
+  }
+  else
+  {
+    gametimeHrsElement.remove();
+  }
+
+  return gameElement;
 }
 
 // Function for setting the game list of a column – used initially & by sorters

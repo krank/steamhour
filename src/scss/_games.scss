@@ -17,26 +17,12 @@
       content: " games";
     }
   }
-
-  .sorters {
-    font-size: .8em;
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-
-    a {
-      text-indent: 1rem;
-    }
-    a:hover {
-      background-color: #eee;
-    }
-  }
 }
 
 @media (min-width: 45rem) {
   .games {
     grid-auto-flow: column;
-    grid-auto-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -56,6 +42,9 @@ section.gamelist {
     margin: 1em;
     padding: 0.5em;
     padding-bottom: 1.2em;
+
+    overflow-x: hidden;
+    
 
     display: grid;
     grid-template-columns: min-content auto;

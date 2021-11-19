@@ -2,9 +2,9 @@ export interface UserGames {
   game_count: number;
   games: SteamGame[];
   stats?: Stats;
-  games60Plus?: GameCollection;
-  games60Minus?: GameCollection;
-  gamesZero?: GameCollection;
+  games_60_plus?: GameCollection;
+  games_60_minus?: GameCollection;
+  games_zero?: GameCollection;
 }
 
 export interface GameCollection {
@@ -22,11 +22,12 @@ export interface SteamGame {
   playtime_linux_forever: number;
   playtime_mac_forever: number;
   playtime_windows_forever: number;
+  playtime_natural_language: string;
 }
 
 export interface Stats {
-  totalNumberOfGames: number;
-  totalNumberOfMinutesPlayed: number;
+  total_number_of_games: number;
+  total_number_of_minutes_played: number;
 }
 
 function getPercent(fraction: number, whole: number): string {
@@ -70,47 +71,47 @@ export function MakeRequest(steamId: string, includeFreeGames: boolean, callback
 
 function ProcessResponse(jsonData: UserGames): void {
 
-  jsonData.games60Plus = { games: [], num: 0, percent: "" };
-  jsonData.games60Minus = { games: [], num: 0, percent: "" };
-  jsonData.gamesZero = { games: [], num: 0, percent: "" };
+  jsonData.games_60_plus = { games: [], num: 0, percent: "" };
+  jsonData.games_60_minus = { games: [], num: 0, percent: "" };
+  jsonData.games_zero = { games: [], num: 0, percent: "" };
+
+  // Sort based on (reverse) playtime first, then name
+
+  jsonData.games.sort((gameA: SteamGame, gameB: SteamGame) => 
+    gameA.playtime_forever == gameB.playtime_forever ?
+    gameA.name.localeCompare(gameB.name) :
+    gameB.playtime_forever - gameA.playtime_forever
+  );
 
   jsonData.games.forEach((game: SteamGame) => {
+
+    // Categorize based on playtime
     if (game.playtime_forever == 0) {
-      jsonData.gamesZero.games.push(game);
+      jsonData.games_zero.games.push(game);
     }
     else if (game.playtime_forever < 60) {
-      jsonData.games60Minus.games.push(game);
+      jsonData.games_60_minus.games.push(game);
     }
     else {
-      jsonData.games60Plus.games.push(game);
+      // Time conversion to natural language (XXhYYm)
+      let hours:number = Math.floor(game.playtime_forever / 60);
+      let minutes:number = game.playtime_forever % 60;
+      game.playtime_natural_language = `${hours}h${minutes}m`;
+
+      jsonData.games_60_plus.games.push(game);
     }
   });
 
-  jsonData.stats = {
-    totalNumberOfGames: jsonData.game_count,
-    totalNumberOfMinutesPlayed: 0
-  }
 
-  calculateStat(jsonData.games60Plus, jsonData.game_count);
-  calculateStat(jsonData.games60Minus, jsonData.game_count);
-  calculateStat(jsonData.gamesZero, jsonData.game_count);
-}
-
-function calculateStats(jsonData: UserGames): void {
 
   jsonData.stats = {
-    totalNumberOfGames: jsonData.game_count,
-    totalNumberOfMinutesPlayed: 0
-
-    // games60PlusNum: jsonData.games60Plus.length,
-    // games60MinusNum: jsonData.games60Minus.length,
-    // gamesZeroNum: jsonData.gamesZero.length,
-
-    // games60PlusPercent: getPercent(jsonData.games60Plus.length, jsonData.game_count),
-    // games60MinusPercent: getPercent(jsonData.games60Minus.length, jsonData.game_count),
-    // gamesZeroPercent: getPercent(jsonData.gamesZero.length, jsonData.game_count)
+    total_number_of_games: jsonData.game_count,
+    total_number_of_minutes_played: 0
   }
 
+  calculateStat(jsonData.games_60_plus, jsonData.game_count);
+  calculateStat(jsonData.games_60_minus, jsonData.game_count);
+  calculateStat(jsonData.games_zero, jsonData.game_count);
 }
 
 function calculateStat(gameCollection: GameCollection, gameCount: number) {
