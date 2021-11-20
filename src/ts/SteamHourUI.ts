@@ -160,6 +160,3 @@ function makeGameElement(game: SteamHour.SteamGame): DocumentFragment
 
   return gameElement;
 }
-
-// Function for setting the game list of a column – used initially & by sorters
-// Clears the old content, reads the list, sorts it according to what's wanted, generates html
