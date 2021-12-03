@@ -1,0 +1,87 @@
+/* == GAME LISTS == */
+
+.games {
+  display: grid;
+  gap: 1rem;
+
+  p {
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+
+  .columnsub {
+    font-style: italic;
+    padding-left: 1rem;
+
+    .num::after {
+      content: " games";
+    }
+  }
+}
+
+@media (min-width: 45rem) {
+  .games {
+    grid-auto-flow: column;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.descending::after {
+  content: "▼";
+}
+
+.ascending::after {
+  content: "▲";
+}
+
+/* == GAME BLOCKS == */
+
+section.gamelist {
+  article {
+    border: 2px solid #333;
+    margin: 1em;
+    padding: 0.5em;
+    padding-bottom: 1.2em;
+
+    overflow-x: hidden;
+    
+
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-template-areas:
+      "image ."
+      "image ."
+      "image .";
+    column-gap: 1em;
+
+    img {
+      grid-area: image;
+      
+      width: 32px;
+      height: 32px;
+      background-color: #333;
+    }
+
+    p {
+      margin-top: 0.2em;
+      margin-bottom: 0.2em;
+      overflow: hidden;
+    }
+
+    p.gametime_hrs {
+      font-size: 0.8em;
+      font-style: italic;
+      text-indent: 1rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.3em;
+    }
+
+    p, h3 {
+      grid-column: 2;
+    }
+  }
+}

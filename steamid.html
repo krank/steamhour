@@ -2,71 +2,79 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>SteamHour</title>
+  <meta charset="UTF-8">
+  <title>SteamHour: SteamID</title>
 
-    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    
-    <link rel="stylesheet" href="style.css">
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,700;1,500&display=swap"
+    rel="stylesheet">
+
+  <link rel="icon" href="images/favicon.png">
+
+  <link rel="stylesheet" href="css/style.css">
+
 </head>
 
 <body>
+  <header>
+    <h1><a href="index.html">SteamHour</a></h1>
+  </header>
+  <main>
+    <section class="content">
+      <h2>Finding your ID</h2>
+      <p>SteamHour needs your numeric Steam ID or your Vanity URL in order to work its magic. Due to how the Steam API
+        operates, using your login or nickname won't work.</p>
+      <h3>Vanity URL</h3>
+      <p>The vanity URL is the simplest one:</p>
+      <ol>
+        <li>
+          <p>Go to your profile page.</p>
+          <p><img src="images/steamid/profilemenu.png" alt="The profile menu"></p>
+        </li>
+        <li>
+          <p>Click the Edit Profile button</p>
+          <p><img src="images/steamid/editprofile.png" alt="Edit profile button"></p>
+        </li>
+        <li>
+          <p>Look in the textbox marked "Custom URL".</p>
+          <p><img src="images/steamid/customurl.png" alt="Custom URL textbox"></p>
+        </li>
+      </ol>
 
-    <main>
-        <header>
-            <h1><a href="index.html">SteamHour</a></h1>
-        </header>
+      <h3>Numeric SteamID</h3>
+      <p>Finding your numeric ID is a little more complex. There are several ways; we believe this one is the simplest:
+      </p>
+      <ol>
+        <li>
+          <p>Go to your profile page.</p>
+          <p><img src="images/steamid/profilemenu.png" alt="The profile menu"></p>
+        </li>
+        <li>
+          <p>Right-click the background and select "Copy Page URL"</p>
+          <p><img src="images/steamid/copypageurl.png" alt="Copy Page URL link"></p>
+        </li>
+        <li>
+          <p>If you paste the URL into a text editor (like notepad), it will look a little bit like this:</p>
+          <p>http://steamcommunity.com/profiles/00000000000000000/</p>
+        </li>
+        <li>
+          <p>The list of numbers is your numeric Steam ID.</p>
+        </li>
+      </ol>
 
-        <section class="content">
-            <h2>Finding your ID</h2>
-            <p>SteamHour needs your numeric Steam ID or your Vanity URL in order to work its magic. Due to how the Steam API operates, using your login or nickname won't work.</p>
-            <h3>Vanity URL</h3>
-            <p>The vanity URL is the simplest one:</p>
-            <ol>
-                <li>
-                    <p>Go to your profile page.</p>
-                    <p><img src="images/steamid/profilemenu.png" alt="The profile menu"></p>
-                </li>
-                <li>
-                    <p>Click the Edit Profile button</p>
-                    <p><img src="images/steamid/editprofile.png" alt="Edit profile button"></p>
-                </li>
-                <li>
-                    <p>Look in the textbox that's marked "Custom URL".</p>
-                    <p><img src="images/steamid/customurl.png" alt="Custom URL textbox"></p>
-                </li>
-            </ol>
-            
-            <h3>Numeric SteamID</h3>
-            <p>Finding your numeric ID is a little more complex. There are several ways; we believe this one is the simplest:</p>
-            <ol>
-                <li>
-                    <p>Go to your profile page.</p>
-                    <p><img src="images/steamid/profilemenu.png" alt="The profile menu"></p>
-                </li>
-                <li>
-                    <p>Right-click the background and select "Copy Page URL"</p>
-                    <p><img src="images/steamid/copypageurl.png" alt="Copy Page URL link"></p>
-                </li>
-                <li>
-                    <p>If you paste the URL into a text editor (like notepad), it will look a little bit like this:</p>
-                    <p>http://steamcommunity.com/profiles/00000000000000000/</p>
-                </li>
-                <li><p>The list of numbers is your numeric Steam ID.</p></li>
-            </ol>
-            
-        </section>
+    </section>
 
-        
 
-        <footer>
-            <a href="about.html">About</a>
-            <a href="privacy.html">Privacy policy</a>
-            <a href="http://steampowered.com">Powered by Steam</a>
-        </footer>
-    </main>
+
+  </main>
+  <footer>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy policy</a>
+    <a href="http://steampowered.com">Powered by Steam</a>
+  </footer>
 
 
 
