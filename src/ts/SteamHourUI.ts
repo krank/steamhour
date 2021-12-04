@@ -78,8 +78,7 @@ function displayError(error: string) {
   document.querySelector("section.error").classList.add("active");
 }
 
-function clearResults()
-{
+function clearResults() {
   document.querySelector("section.games").innerHTML = "";
   document.querySelector("section.summary").classList.remove("active");
   document.querySelector("section.error").classList.remove("active");
@@ -92,13 +91,13 @@ function updateOverallStats(jsonData: SteamHour.UserGames) {
   document.querySelector("section.summary span.total_minutes")
     .textContent = jsonData.stats.total_number_of_minutes_played.toString();
 
-  updateSingleOverallStat("sixtyplus",jsonData.games_60_plus);
+  updateSingleOverallStat("sixtyplus", jsonData.games_60_plus);
   updateSingleOverallStat("lessthansixty", jsonData.games_60_minus);
   updateSingleOverallStat("zerominutes", jsonData.games_zero);
 
 }
 
-function updateSingleOverallStat(baseSelector: string, gameCollection:SteamHour.GameCollection): void {
+function updateSingleOverallStat(baseSelector: string, gameCollection: SteamHour.GameCollection): void {
   document.querySelector(`section.summary span.${baseSelector}.num`)
     .textContent = gameCollection.num.toString();
   document.querySelector(`section.summary span.${baseSelector}.percent`)
@@ -114,7 +113,7 @@ function makeColumn(headerText: string, gameCollection: SteamHour.GameCollection
   column.querySelector("span.num").textContent = gameCollection.num.toString();
   column.querySelector("span.percent").textContent = gameCollection.percent;
 
-  let gamelistContainer:HTMLElement = column.querySelector("section.gamelist");
+  let gamelistContainer: HTMLElement = column.querySelector("section.gamelist");
 
   // Create element for each game
   gameCollection.games.forEach((gameData: SteamHour.SteamGame) => {
@@ -126,35 +125,34 @@ function makeColumn(headerText: string, gameCollection: SteamHour.GameCollection
   return column;
 }
 
-function makeGameElement(game: SteamHour.SteamGame): DocumentFragment
-{
-  console.log(game);
+function makeGameElement(game: SteamHour.SteamGame): DocumentFragment {
 
   let gameElementTemplate: HTMLTemplateElement = document.querySelector("template.game");
   let gameElement: DocumentFragment = document.importNode(gameElementTemplate, true).content;
 
+
+  let iconImage: string = game.img_icon_url ?
+    `https://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`
+    : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAH0lEQVR42mNkoBAwjhowasCoAaMGjBowasCoAcPNAACOMAAhOO/A7wAAAABJRU5ErkJggg==";
+
+  gameElement.querySelector("img.gameicon").setAttribute("src", iconImage);
   gameElement.querySelector("h3").textContent = game.name;
-  gameElement.querySelector("img.gameicon").setAttribute("src", 
-  `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`);
+
 
   let gametimeElement = gameElement.querySelector(".gametime");
   let gametimeHrsElement = gameElement.querySelector(".gametime_hrs");
 
-  if (game.playtime_forever > 0)
-  {
+  if (game.playtime_forever > 0) {
     gametimeElement.textContent = game.playtime_forever.toString() + " minutes";
   }
-  else
-  {
+  else {
     gametimeElement.remove();
   }
 
-  if (game.playtime_forever >= 60)
-  {
+  if (game.playtime_forever >= 60) {
     gametimeHrsElement.textContent = game.playtime_natural_language;
   }
-  else
-  {
+  else {
     gametimeHrsElement.remove();
   }
 

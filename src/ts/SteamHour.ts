@@ -47,7 +47,7 @@ export function MakeRequest(steamId: string, includeFreeGames: boolean, callback
     .then(response => response.json())
     .then(jsonData => {
 
-      console.log(jsonData);
+      // console.log(jsonData);
 
       if (!jsonData.response) {
         errorCallback(jsonData.error);
@@ -75,6 +75,11 @@ function ProcessResponse(jsonData: UserGames): void {
   jsonData.games_60_minus = { games: [], num: 0, percent: "" };
   jsonData.games_zero = { games: [], num: 0, percent: "" };
 
+  jsonData.stats = {
+    total_number_of_games: jsonData.game_count,
+    total_number_of_minutes_played: 0
+  }
+
   // Sort based on (reverse) playtime first, then name
 
   jsonData.games.sort((gameA: SteamGame, gameB: SteamGame) => 
@@ -84,6 +89,9 @@ function ProcessResponse(jsonData: UserGames): void {
   );
 
   jsonData.games.forEach((game: SteamGame) => {
+
+    // Add playtime to total
+    jsonData.stats.total_number_of_minutes_played += game.playtime_forever;
 
     // Categorize based on playtime
     if (game.playtime_forever == 0) {
@@ -104,10 +112,7 @@ function ProcessResponse(jsonData: UserGames): void {
 
 
 
-  jsonData.stats = {
-    total_number_of_games: jsonData.game_count,
-    total_number_of_minutes_played: 0
-  }
+
 
   calculateStat(jsonData.games_60_plus, jsonData.game_count);
   calculateStat(jsonData.games_60_minus, jsonData.game_count);
