@@ -87,9 +87,9 @@ function clearResults() {
 function updateOverallStats(jsonData: SteamHour.UserGames) {
 
   document.querySelector("section.summary span.games_num")
-    .textContent = jsonData.stats.total_number_of_games.toString();
+    .textContent = jsonData.game_count.toString();
   document.querySelector("section.summary span.total_minutes")
-    .textContent = jsonData.stats.total_number_of_minutes_played.toString();
+    .textContent = `${jsonData.playtime_forever} (${jsonData.playtime_natural_language})`;
 
   updateSingleOverallStat("sixtyplus", jsonData.games_60_plus);
   updateSingleOverallStat("lessthansixty", jsonData.games_60_minus);

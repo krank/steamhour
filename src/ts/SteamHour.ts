@@ -1,7 +1,8 @@
 export interface UserGames {
   game_count: number;
   games: SteamGame[];
-  stats?: Stats;
+  playtime_forever: number;
+  playtime_natural_language: string;
   games_60_plus?: GameCollection;
   games_60_minus?: GameCollection;
   games_zero?: GameCollection;
@@ -25,10 +26,10 @@ export interface SteamGame {
   playtime_natural_language: string;
 }
 
-export interface Stats {
-  total_number_of_games: number;
-  total_number_of_minutes_played: number;
-}
+// export interface Stats {
+//   total_number_of_games: number;
+//   total_number_of_minutes_played: number;
+// }
 
 function getPercent(fraction: number, whole: number): string {
   return (fraction / whole * 100).toFixed(2);
@@ -75,10 +76,8 @@ function ProcessResponse(jsonData: UserGames): void {
   jsonData.games_60_minus = { games: [], num: 0, percent: "" };
   jsonData.games_zero = { games: [], num: 0, percent: "" };
 
-  jsonData.stats = {
-    total_number_of_games: jsonData.game_count,
-    total_number_of_minutes_played: 0
-  }
+  jsonData.playtime_forever = 0;
+  jsonData.playtime_natural_language = "";
 
   // Sort based on (reverse) playtime first, then name
 
@@ -91,7 +90,7 @@ function ProcessResponse(jsonData: UserGames): void {
   jsonData.games.forEach((game: SteamGame) => {
 
     // Add playtime to total
-    jsonData.stats.total_number_of_minutes_played += game.playtime_forever;
+    jsonData.playtime_forever += game.playtime_forever;
 
     // Categorize based on playtime
     if (game.playtime_forever == 0) {
@@ -101,16 +100,12 @@ function ProcessResponse(jsonData: UserGames): void {
       jsonData.games_60_minus.games.push(game);
     }
     else {
-      // Time conversion to natural language (XXhYYm)
-      let hours:number = Math.floor(game.playtime_forever / 60);
-      let minutes:number = game.playtime_forever % 60;
-      game.playtime_natural_language = `${hours}h${minutes}m`;
-
+      game.playtime_natural_language = getNaturalTime(game.playtime_forever);
       jsonData.games_60_plus.games.push(game);
     }
   });
 
-
+  jsonData.playtime_natural_language = getNaturalTime(jsonData.playtime_forever);
 
 
 
@@ -122,4 +117,12 @@ function ProcessResponse(jsonData: UserGames): void {
 function calculateStat(gameCollection: GameCollection, gameCount: number) {
   gameCollection.num = gameCollection.games.length;
   gameCollection.percent = getPercent(gameCollection.games.length, gameCount);
+}
+
+// Time conversion to natural language (XXhYYm)
+function getNaturalTime(minutes: number): string
+{
+  let hours:number = Math.floor(minutes / 60);
+  let mins:number = minutes % 60;
+  return `${hours}h${mins}m`;
 }
