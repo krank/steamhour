@@ -116,6 +116,10 @@ section {
   }
 }
 
+.loading.active {
+  display: block;
+}
+
 .error {
   display: none;
 }
