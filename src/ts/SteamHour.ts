@@ -26,11 +26,6 @@ export interface SteamGame {
   playtime_natural_language: string;
 }
 
-// export interface Stats {
-//   total_number_of_games: number;
-//   total_number_of_minutes_played: number;
-// }
-
 function getPercent(fraction: number, whole: number): string {
   return (fraction / whole * 100).toFixed(2);
 }
@@ -48,8 +43,6 @@ export function MakeRequest(steamId: string, includeFreeGames: boolean, callback
     .then(response => response.json())
     .then(jsonData => {
 
-      // console.log(jsonData);
-
       if (!jsonData.response) {
         errorCallback(jsonData.error);
         return;
@@ -62,7 +55,6 @@ export function MakeRequest(steamId: string, includeFreeGames: boolean, callback
 
       let newJsonData: UserGames = jsonData.response;
 
-      // console.log(newJsonData);
       ProcessResponse(newJsonData);
 
       callback(newJsonData);

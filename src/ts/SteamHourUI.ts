@@ -53,13 +53,27 @@ function setupFormInteractivity(form: HTMLFormElement) {
 
 function makeRequest(steamId: string, includeFreeGames: boolean, callback: (jsonData: SteamHour.UserGames) => void, errorCallback: (error: string) => void) {
 
+  showLoading(true);
   clearResults();
 
   SteamHour.MakeRequest(steamId, includeFreeGames, displayResults, displayError);
 }
 
+function showLoading(display: boolean)
+{
+  if (display)
+  {
+    document.querySelector("section.loading").classList.add("active");
+  }
+  else
+  {
+    document.querySelector("section.loading").classList.remove("active");
+  }
+}
+
 function displayResults(jsonData: SteamHour.UserGames) {
 
+  showLoading(false);
   updateOverallStats(jsonData);
 
   let column60Plus: DocumentFragment = makeColumn("60+ minutes", jsonData.games_60_plus);
@@ -74,6 +88,7 @@ function displayResults(jsonData: SteamHour.UserGames) {
 }
 
 function displayError(error: string) {
+  showLoading(false);
   document.querySelector("section.error p").textContent = error;
   document.querySelector("section.error").classList.add("active");
 }
