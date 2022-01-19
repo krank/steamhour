@@ -40,24 +40,34 @@ export function MakeRequest(steamId: string, includeFreeGames: boolean, callback
 
   // Make request
   fetch(requestUrl)
-    .then(response => response.json())
+    .then(function (response) {
+      if (response.ok) {
+        return response.json();
+      }
+      else {
+        errorCallback(`HTTP error: ${response.status} ${response.statusText}`);
+        return;
+      }
+    })
     .then(jsonData => {
+      if (jsonData !== undefined) {
 
-      if (!jsonData.response) {
-        errorCallback(jsonData.error);
-        return;
+        if (!jsonData.response) {
+          errorCallback(jsonData.error);
+          return;
+        }
+
+        if (Object.keys(jsonData.response).length == 0) {
+          errorCallback("Empty response; make sure user's privacy settings allow looking at their games.");
+          return;
+        }
+
+        let newJsonData: UserGames = jsonData.response;
+
+        ProcessResponse(newJsonData);
+
+        callback(newJsonData);
       }
-
-      if (Object.keys(jsonData.response).length == 0) {
-        errorCallback("Empty response; make sure user's privacy settings allow looking at their games.");
-        return;
-      }
-
-      let newJsonData: UserGames = jsonData.response;
-
-      ProcessResponse(newJsonData);
-
-      callback(newJsonData);
     });
 
 }
@@ -73,10 +83,10 @@ function ProcessResponse(jsonData: UserGames): void {
 
   // Sort based on (reverse) playtime first, then name
 
-  jsonData.games.sort((gameA: SteamGame, gameB: SteamGame) => 
+  jsonData.games.sort((gameA: SteamGame, gameB: SteamGame) =>
     gameA.playtime_forever == gameB.playtime_forever ?
-    gameA.name.localeCompare(gameB.name) :
-    gameB.playtime_forever - gameA.playtime_forever
+      gameA.name.localeCompare(gameB.name) :
+      gameB.playtime_forever - gameA.playtime_forever
   );
 
   jsonData.games.forEach((game: SteamGame) => {
@@ -112,9 +122,8 @@ function calculateStat(gameCollection: GameCollection, gameCount: number) {
 }
 
 // Time conversion to natural language (XXhYYm)
-function getNaturalTime(minutes: number): string
-{
-  let hours:number = Math.floor(minutes / 60);
-  let mins:number = minutes % 60;
+function getNaturalTime(minutes: number): string {
+  let hours: number = Math.floor(minutes / 60);
+  let mins: number = minutes % 60;
   return `${hours}h${mins}m`;
 }
