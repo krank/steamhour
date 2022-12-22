@@ -1,3 +1,4 @@
 /.user.ini
 settings.php
 node_modules
+/vendor/

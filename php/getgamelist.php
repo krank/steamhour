@@ -13,7 +13,7 @@ include_once "json.php";
  * INITIAL SETUP
  */
 
- // Set variables from the HTTP request
+// Set variables from the HTTP request
 $steam_id = $_REQUEST["steamid"];
 
 $include_free_games = $_REQUEST["includefreegames"] ?? "";

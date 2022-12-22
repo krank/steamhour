@@ -1,0 +1,15 @@
+{
+  "name": "krank/steamhour",
+  "type": "project",
+  "require": {
+    "ext-json": "*",
+    "ext-ctype": "*",
+    "ext-curl": "*"
+  },
+  "authors": [
+    {
+      "name": "Mikael Bergström",
+      "email": "krank23@gmail.com"
+    }
+  ]
+}
