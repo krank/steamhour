@@ -1,5 +1,9 @@
 <?php
 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
 include_once "settings.php";
 include_once "steam.php";
 include_once "json.php";
@@ -11,7 +15,8 @@ include_once "json.php";
 
  // Set variables from the HTTP request
 $steam_id = $_REQUEST["steamid"];
-$include_free_games = $_REQUEST["includefreegames"];
+
+$include_free_games = $_REQUEST["includefreegames"] ?? "";
 
 // Declare this page to be a JSON document
 header('Content-type: application/json');
